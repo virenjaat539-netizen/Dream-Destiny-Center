@@ -1,0 +1,26 @@
+uploads = []
+outputs = []
+
+[[generated]]
+id = "wfYQsW38geuQF78C1YuS1"
+uri = "file://artifacts/dream-destiny/public/images/hero.png"
+type = "image"
+title = "Premium modern study center"
+
+[[generated]]
+id = "BWIYvwVmQoT1o9AoZPrM0"
+uri = "file://artifacts/dream-destiny/public/images/success.png"
+type = "image"
+title = "Happy successful student"
+
+[[generated]]
+id = "FCth6rgWwe5Tr1V0DWiqY"
+uri = "file://artifacts/dream-destiny/public/images/mentor.png"
+type = "image"
+title = "Professional friendly mentor"
+
+[[generated]]
+id = "EFwILu5c8wzwr9Tby70F5"
+uri = "file://artifacts/dream-destiny/public/images/travel.png"
+type = "image"
+title = "Travel abroad concept"
