@@ -1,185 +1,163 @@
-import React from "react";
-import { motion } from "framer-motion";
-import { ArrowRight, CheckCircle, Star, Target, BookOpen, Clock, Users, Award, MapPin, Phone, Mail } from "lucide-react";
+import React, { useEffect, useRef, useState } from "react";
+import { motion, useInView } from "framer-motion";
+import { ArrowRight, CheckCircle, Star, Target, BookOpen, Clock, Users, Award, MapPin, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import Logo from "@/components/Logo";
+import { Link } from "wouter";
 
-const fadeIn = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0 }
+const fadeUp = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
 };
 
-const staggerContainer = {
+const stagger = {
   hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1
-    }
-  }
+  visible: { opacity: 1, transition: { staggerChildren: 0.12 } }
 };
+
+function AnimatedCounter({ target, suffix = "" }: { target: number; suffix?: string }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true });
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    if (!inView) return;
+    let start = 0;
+    const duration = 1800;
+    const step = Math.ceil(target / (duration / 16));
+    const timer = setInterval(() => {
+      start += step;
+      if (start >= target) { setCount(target); clearInterval(timer); }
+      else setCount(start);
+    }, 16);
+    return () => clearInterval(timer);
+  }, [inView, target]);
+
+  return <div ref={ref} className="text-4xl lg:text-5xl font-bold text-foreground">{count}{suffix}</div>;
+}
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-background overflow-hidden">
-      {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-20">
-            <Logo size={44} showText={true} textSize="text-lg" />
-            <div className="hidden md:flex space-x-8">
-              <a href="#about" className="text-muted-foreground hover:text-primary transition-colors text-sm font-medium">About</a>
-              <a href="#services" className="text-muted-foreground hover:text-primary transition-colors text-sm font-medium">Programs</a>
-              <a href="#success" className="text-muted-foreground hover:text-primary transition-colors text-sm font-medium">Success Stories</a>
-              <a href="#contact" className="text-muted-foreground hover:text-primary transition-colors text-sm font-medium">Contact</a>
-            </div>
-            <div className="flex items-center gap-4">
-              <a href="tel:9315758000">
-                <Button variant="ghost" className="hidden md:inline-flex gap-2 text-sm">
-                  <Phone className="w-4 h-4" />
-                  93157-58000
-                </Button>
-              </a>
-              <Button className="bg-primary text-primary-foreground hover:bg-primary/90 font-medium">
-                Book Free Trial
-              </Button>
-            </div>
-          </div>
-        </div>
-      </nav>
+    <div className="bg-background overflow-hidden">
 
-      {/* Hero Section */}
-      <section className="pt-32 pb-20 lg:pt-48 lg:pb-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      {/* Hero */}
+      <section className="pt-16 pb-20 lg:pt-28 lg:pb-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-8 items-center">
-          <motion.div
-            initial="hidden"
-            animate="visible"
-            variants={staggerContainer}
-            className="max-w-2xl"
-          >
-            <motion.div variants={fadeIn} className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-secondary/20 text-secondary-foreground text-sm font-medium mb-6">
+          <motion.div initial="hidden" animate="visible" variants={stagger} className="max-w-2xl">
+            <motion.div variants={fadeUp} className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-secondary/20 text-secondary-foreground text-sm font-semibold mb-6">
               <Star className="w-4 h-4 text-secondary" />
               <span>Trusted Institute Since 2018</span>
             </motion.div>
-            <motion.h1 variants={fadeIn} className="text-5xl lg:text-7xl font-serif font-bold leading-[1.1] tracking-tight mb-6 text-foreground">
-              Your Gateway to a <span className="text-primary italic">Global Future</span>
+            <motion.h1 variants={fadeUp} className="text-5xl lg:text-7xl font-serif font-bold leading-[1.1] tracking-tight mb-6 text-foreground">
+              Your Gateway to a{" "}
+              <span className="text-primary italic">Global Future</span>
             </motion.h1>
-            <motion.p variants={fadeIn} className="text-lg lg:text-xl text-muted-foreground mb-4 leading-relaxed max-w-xl">
-              Dream Destiny transforms students' English scores with expert IELTS, PTE, and Visa Services coaching. We don't just teach English — we unlock your pathway to immigration, education, and career abroad.
+            <motion.p variants={fadeUp} className="text-lg lg:text-xl text-muted-foreground mb-5 leading-relaxed max-w-xl">
+              Dream Destiny transforms students' English scores with expert IELTS, PTE, and Visa Services coaching. We unlock your pathway to immigration, education, and career abroad.
             </motion.p>
-            <motion.div variants={fadeIn} className="flex flex-wrap gap-2 mb-8">
+            <motion.div variants={fadeUp} className="flex flex-wrap gap-2 mb-8">
               {["IELTS", "PTE", "Visa Services"].map((tag) => (
-                <span key={tag} className="px-3 py-1 rounded-full text-xs font-bold border-2" style={{ borderColor: "#2d6a4f", color: "#2d6a4f" }}>
-                  {tag}
-                </span>
+                <span key={tag} className="px-3 py-1 rounded-full text-xs font-bold border-2" style={{ borderColor: "#2d6a4f", color: "#2d6a4f" }}>{tag}</span>
               ))}
             </motion.div>
-            <motion.div variants={fadeIn} className="flex flex-col sm:flex-row gap-4">
-              <Button size="lg" className="h-14 px-8 text-base bg-primary text-primary-foreground hover:bg-primary/90 rounded-full shadow-lg shadow-primary/25">
-                Start Your Journey <ArrowRight className="ml-2 w-5 h-5" />
-              </Button>
-              <Button size="lg" variant="outline" className="h-14 px-8 text-base rounded-full border-2">
-                View Success Stories
-              </Button>
+            <motion.div variants={fadeUp} className="flex flex-col sm:flex-row gap-4">
+              <Link href="/contact">
+                <Button size="lg" className="h-14 px-8 text-base bg-primary text-primary-foreground hover:bg-primary/90 rounded-full shadow-lg shadow-primary/25">
+                  Start Your Journey <ArrowRight className="ml-2 w-5 h-5" />
+                </Button>
+              </Link>
+              <Link href="/about">
+                <Button size="lg" variant="outline" className="h-14 px-8 text-base rounded-full border-2">
+                  About Us
+                </Button>
+              </Link>
             </motion.div>
-
-            <motion.div variants={fadeIn} className="mt-12 pt-8 border-t border-border flex items-center gap-8">
-              <div>
-                <div className="text-3xl font-bold text-foreground">98%</div>
-                <div className="text-sm text-muted-foreground mt-1">Success Rate</div>
-              </div>
-              <div>
-                <div className="text-3xl font-bold text-foreground">500+</div>
-                <div className="text-sm text-muted-foreground mt-1">Visas Granted</div>
-              </div>
-              <div>
-                <div className="text-3xl font-bold text-foreground">79+</div>
-                <div className="text-sm text-muted-foreground mt-1">Average Score</div>
-              </div>
+            <motion.div variants={fadeUp} className="mt-12 pt-8 border-t border-border flex items-center gap-8">
+              <div><div className="text-3xl font-bold text-foreground">98%</div><div className="text-sm text-muted-foreground mt-1">Success Rate</div></div>
+              <div><div className="text-3xl font-bold text-foreground">500+</div><div className="text-sm text-muted-foreground mt-1">Visas Granted</div></div>
+              <div><div className="text-3xl font-bold text-foreground">79+</div><div className="text-sm text-muted-foreground mt-1">Avg PTE Score</div></div>
             </motion.div>
           </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="relative"
-          >
+          <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8, delay: 0.2 }} className="relative">
             <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 to-secondary/20 rounded-[3rem] blur-3xl -z-10" />
-            <img
-              src="/images/hero.png"
-              alt="Students studying at Dream Destiny"
-              className="w-full h-auto object-cover rounded-[2rem] shadow-2xl border border-border/50"
-            />
-
-            {/* Floating Badge */}
-            <div className="absolute -bottom-6 -left-6 bg-card p-6 rounded-2xl shadow-xl border border-border max-w-[240px]">
-              <div className="flex items-center gap-4 mb-3">
-                <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center">
+            <img src="/images/hero.png" alt="Students studying at Dream Destiny" className="w-full h-auto object-cover rounded-[2rem] shadow-2xl border border-border/50" />
+            <motion.div
+              initial={{ opacity: 0, x: -20, y: 20 }}
+              animate={{ opacity: 1, x: 0, y: 0 }}
+              transition={{ delay: 0.8, duration: 0.5 }}
+              className="absolute -bottom-6 -left-6 bg-card p-5 rounded-2xl shadow-xl border border-border max-w-[220px]"
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-11 h-11 rounded-full bg-green-100 flex items-center justify-center">
                   <CheckCircle className="w-6 h-6 text-green-600" />
                 </div>
                 <div>
-                  <div className="font-bold text-foreground">Score Guarantee</div>
+                  <div className="font-bold text-foreground text-sm">Score Guarantee</div>
                   <div className="text-xs text-muted-foreground">Or retake for free</div>
                 </div>
               </div>
-            </div>
+            </motion.div>
           </motion.div>
         </div>
       </section>
 
-      {/* Features Section */}
+      {/* Animated Stats */}
+      <section className="py-20" style={{ background: "linear-gradient(135deg, #2d6a4f 0%, #1b4332 100%)" }}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={stagger} className="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center text-white">
+            {[
+              { target: 98, suffix: "%", label: "Success Rate" },
+              { target: 2000, suffix: "+", label: "Students Trained" },
+              { target: 500, suffix: "+", label: "Visas Granted" },
+              { target: 8, suffix: "+", label: "Years Experience" },
+            ].map((stat, i) => (
+              <motion.div key={i} variants={fadeUp} className="group">
+                <AnimatedCounter target={stat.target} suffix={stat.suffix} />
+                <div className="text-white/70 mt-2 text-sm font-medium">{stat.label}</div>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Services */}
       <section id="services" className="py-24 bg-card">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-sm font-bold text-primary tracking-wider uppercase mb-3">Our Expertise</h2>
-            <h3 className="text-4xl md:text-5xl font-serif font-bold text-foreground mb-6">IELTS, PTE and Visa — all under one roof</h3>
-            <p className="text-lg text-muted-foreground">Complete preparation for every module, plus end-to-end visa guidance to get you across the border.</p>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={stagger} className="text-center max-w-3xl mx-auto mb-16">
+            <motion.h2 variants={fadeUp} className="text-sm font-bold text-primary tracking-wider uppercase mb-3">Our Expertise</motion.h2>
+            <motion.h3 variants={fadeUp} className="text-4xl md:text-5xl font-serif font-bold text-foreground mb-6">IELTS, PTE and Visa — all under one roof</motion.h3>
+            <motion.p variants={fadeUp} className="text-lg text-muted-foreground">Complete preparation for every module, plus end-to-end visa guidance.</motion.p>
+          </motion.div>
+          <div className="grid md:grid-cols-3 gap-8 mb-10">
             {[
-              { title: "IELTS Coaching", icon: BookOpen, desc: "Full band-score preparation for Academic and General IELTS with proven strategies for all four skills.", color: "bg-blue-100 text-blue-600" },
-              { title: "PTE Academic", icon: Target, desc: "Master Speaking, Writing, Reading and Listening with real-time scoring simulation and expert feedback.", color: "bg-orange-100 text-orange-600" },
-              { title: "Visa Services", icon: Award, desc: "Expert guidance on PR, student, and work visa applications for Australia, Canada, UK and New Zealand.", color: "bg-green-100 text-green-600" },
-            ].map((feature, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-                className="bg-background border border-border rounded-2xl p-8 hover:shadow-xl transition-shadow group"
-              >
-                <div className={`w-14 h-14 rounded-xl ${feature.color} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform`}>
-                  <feature.icon className="w-7 h-7" />
+              { title: "IELTS Coaching", icon: BookOpen, desc: "Full band-score preparation for Academic and General IELTS with proven strategies.", color: "bg-blue-100 text-blue-600" },
+              { title: "PTE Academic", icon: Target, desc: "Master all four modules with real-time scoring simulation and expert feedback.", color: "bg-orange-100 text-orange-600" },
+              { title: "Visa Services", icon: Award, desc: "Expert guidance on PR, student, and work visas for Australia, Canada, UK and more.", color: "bg-green-100 text-green-600" },
+            ].map((f, i) => (
+              <motion.div key={i} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.12 }}
+                className="bg-background border border-border rounded-2xl p-8 hover:shadow-xl transition-all hover:-translate-y-1 group cursor-default">
+                <div className={`w-14 h-14 rounded-xl ${f.color} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform`}>
+                  <f.icon className="w-7 h-7" />
                 </div>
-                <h4 className="text-xl font-bold text-foreground mb-3">{feature.title}</h4>
-                <p className="text-muted-foreground leading-relaxed">{feature.desc}</p>
+                <h4 className="text-xl font-bold text-foreground mb-3">{f.title}</h4>
+                <p className="text-muted-foreground leading-relaxed">{f.desc}</p>
               </motion.div>
             ))}
           </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
             {[
-              { title: "Speaking", icon: Users, desc: "Pronunciation, fluency and confidence with real exam simulations.", color: "bg-purple-100 text-purple-600" },
-              { title: "Writing", icon: BookOpen, desc: "Proven essay and summary templates for top scores.", color: "bg-pink-100 text-pink-600" },
-              { title: "Reading", icon: Target, desc: "Rapid comprehension and time management for complex texts.", color: "bg-yellow-100 text-yellow-600" },
-              { title: "Listening", icon: Clock, desc: "Train your ear across diverse English accents.", color: "bg-teal-100 text-teal-600" }
-            ].map((feature, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-                className="bg-background border border-border rounded-2xl p-6 hover:shadow-lg transition-shadow group"
-              >
-                <div className={`w-12 h-12 rounded-xl ${feature.color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
-                  <feature.icon className="w-6 h-6" />
+              { title: "Speaking", icon: Users, desc: "Fluency, pronunciation, confidence.", color: "bg-purple-100 text-purple-600" },
+              { title: "Writing", icon: BookOpen, desc: "Templates and essay structures.", color: "bg-pink-100 text-pink-600" },
+              { title: "Reading", icon: Target, desc: "Speed and comprehension tactics.", color: "bg-yellow-100 text-yellow-600" },
+              { title: "Listening", icon: Clock, desc: "Train across diverse accents.", color: "bg-teal-100 text-teal-600" },
+            ].map((f, i) => (
+              <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }}
+                className="bg-background border border-border rounded-2xl p-6 hover:shadow-lg transition-all hover:-translate-y-1 group cursor-default">
+                <div className={`w-11 h-11 rounded-xl ${f.color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
+                  <f.icon className="w-5 h-5" />
                 </div>
-                <h4 className="text-lg font-bold text-foreground mb-2">{feature.title}</h4>
-                <p className="text-sm text-muted-foreground leading-relaxed">{feature.desc}</p>
+                <h4 className="text-base font-bold text-foreground mb-2">{f.title}</h4>
+                <p className="text-xs text-muted-foreground leading-relaxed">{f.desc}</p>
               </motion.div>
             ))}
           </div>
@@ -187,24 +165,19 @@ export default function Home() {
       </section>
 
       {/* Why Choose Us */}
-      <section id="about" className="py-24 overflow-hidden">
+      <section className="py-24 overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-            >
+            <motion.div initial={{ opacity: 0, x: -40 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }}>
               <h2 className="text-sm font-bold text-primary tracking-wider uppercase mb-3">The Dream Destiny Difference</h2>
               <h3 className="text-4xl md:text-5xl font-serif font-bold text-foreground mb-8 leading-tight">Why elite performers choose our institute.</h3>
-
               <div className="space-y-6">
                 {[
-                  { title: "Expert One-on-One Mentorship", desc: "Get personalized feedback from our certified trainers — Pradeep Beniwal, Jagdeep Sandhu, and Gurpreet Singh." },
-                  { title: "Proven Score Guarantee", desc: "We're so confident in our methods — if you don't hit your target, you retake for free." },
-                  { title: "Online and Offline Classes", desc: "Flexible learning modes to suit your schedule, wherever you are." },
+                  { title: "Expert One-on-One Mentorship", desc: "Personalized feedback from certified trainers — Pradeep Beniwal, Jagdeep Sandhu, and Gurpreet Singh." },
+                  { title: "Proven Score Guarantee", desc: "If you don't hit your target score, you retake the preparation for free." },
+                  { title: "Online and Offline Classes", desc: "Flexible learning modes to suit your schedule, wherever you are in India." },
                 ].map((item, i) => (
-                  <div key={i} className="flex gap-4">
+                  <motion.div key={i} initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.15 }} className="flex gap-4">
                     <div className="flex-shrink-0 mt-1">
                       <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
                         <CheckCircle className="w-5 h-5 text-primary" />
@@ -214,162 +187,96 @@ export default function Home() {
                       <h4 className="text-lg font-bold text-foreground mb-1">{item.title}</h4>
                       <p className="text-muted-foreground">{item.desc}</p>
                     </div>
-                  </div>
+                  </motion.div>
                 ))}
               </div>
-
-              <div className="mt-10 pt-10 border-t border-border">
-                <div className="flex items-center gap-4">
-                  <div className="flex -space-x-4">
-                    {[1,2,3,4].map(i => (
-                      <div key={i} className="w-12 h-12 rounded-full border-2 border-background bg-muted flex items-center justify-center overflow-hidden">
-                        <img src={`https://i.pravatar.cc/100?img=${i+10}`} alt="Student" className="w-full h-full object-cover" />
-                      </div>
-                    ))}
-                  </div>
-                  <div className="text-sm text-muted-foreground">
-                    Join <span className="font-bold text-foreground">2,000+</span> students who hit their target score.
-                  </div>
+              <div className="mt-10 pt-10 border-t border-border flex items-center gap-4">
+                <div className="flex -space-x-4">
+                  {[1,2,3,4].map(i => (
+                    <div key={i} className="w-12 h-12 rounded-full border-2 border-background bg-muted overflow-hidden">
+                      <img src={`https://i.pravatar.cc/100?img=${i+10}`} alt="Student" className="w-full h-full object-cover" />
+                    </div>
+                  ))}
                 </div>
+                <div className="text-sm text-muted-foreground">Join <span className="font-bold text-foreground">2,000+</span> students who hit their target score.</div>
               </div>
             </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              className="relative"
-            >
-              <img
-                src="/images/mentor.png"
-                alt="Our mentor"
-                className="w-full h-[600px] object-cover rounded-[2rem] shadow-2xl"
-              />
-              <div className="absolute top-1/2 -left-12 bg-card p-6 rounded-2xl shadow-xl border border-border transform -translate-y-1/2">
-                <div className="flex items-center gap-4">
-                  <Award className="w-10 h-10 text-secondary" />
+            <motion.div initial={{ opacity: 0, x: 40 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }} className="relative">
+              <img src="/images/mentor.png" alt="Our mentor" className="w-full h-[500px] object-cover rounded-[2rem] shadow-2xl" />
+              <motion.div initial={{ opacity: 0, scale: 0.8 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ delay: 0.4 }}
+                className="absolute top-1/2 -left-10 bg-card p-5 rounded-2xl shadow-xl border border-border transform -translate-y-1/2">
+                <div className="flex items-center gap-3">
+                  <Award className="w-9 h-9 text-secondary" />
                   <div>
-                    <div className="font-bold text-foreground text-lg">Certified Trainers</div>
+                    <div className="font-bold text-foreground">Certified Trainers</div>
                     <div className="text-sm text-muted-foreground">Since 2018</div>
                   </div>
                 </div>
+              </motion.div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* Destinations */}
+      <section className="py-24 bg-foreground">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            <motion.div initial={{ opacity: 0, x: -40 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="relative">
+              <img src="/images/travel.png" alt="Travel abroad" className="w-full h-auto rounded-[2rem] shadow-2xl" />
+            </motion.div>
+            <motion.div initial={{ opacity: 0, x: 40 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
+              <h2 className="text-sm font-bold text-primary tracking-wider uppercase mb-3">Global Opportunities</h2>
+              <h3 className="text-4xl md:text-5xl font-serif font-bold mb-6 text-white leading-tight">Your ticket to the world's best destinations.</h3>
+              <p className="text-lg text-white/70 mb-10">Whether you are aiming for permanent residency or top-tier universities, a strong score paired with expert visa guidance is your greatest asset.</p>
+              <div className="grid grid-cols-2 gap-5">
+                {['Australia', 'Canada', 'United Kingdom', 'New Zealand'].map((country, i) => (
+                  <motion.div key={country} initial={{ opacity: 0, y: 15 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }}
+                    className="flex items-center gap-3 bg-white/5 p-4 rounded-xl border border-white/10 hover:bg-white/10 transition-colors cursor-pointer">
+                    <MapPin className="w-5 h-5 text-primary" />
+                    <span className="font-medium text-white">{country}</span>
+                  </motion.div>
+                ))}
               </div>
             </motion.div>
           </div>
         </div>
       </section>
 
-      {/* Target Destinations */}
-      <section className="py-24 bg-foreground text-background">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <div className="order-2 lg:order-1 relative">
-              <img src="/images/travel.png" alt="Travel abroad" className="w-full h-auto rounded-[2rem] shadow-2xl" />
-            </div>
-            <div className="order-1 lg:order-2">
-              <h2 className="text-sm font-bold text-primary tracking-wider uppercase mb-3">Global Opportunities</h2>
-              <h3 className="text-4xl md:text-5xl font-serif font-bold mb-6 text-white">Your ticket to the world's best destinations.</h3>
-              <p className="text-lg text-muted/80 mb-10">Whether you are aiming for permanent residency or top-tier universities, a high score paired with expert visa guidance is your strongest asset.</p>
-
-              <div className="grid grid-cols-2 gap-6">
-                {['Australia', 'Canada', 'United Kingdom', 'New Zealand'].map((country) => (
-                  <div key={country} className="flex items-center gap-3 bg-white/5 p-4 rounded-xl border border-white/10 hover:bg-white/10 transition-colors cursor-pointer">
-                    <MapPin className="w-6 h-6 text-primary" />
-                    <span className="font-medium text-white">{country}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
+      {/* CTA */}
       <section className="py-24 relative overflow-hidden">
         <div className="absolute inset-0 bg-primary/5 -z-10" />
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-5xl md:text-6xl font-serif font-bold text-foreground mb-8">Ready to achieve your dream score?</h2>
-          <p className="text-xl text-muted-foreground mb-10 max-w-2xl mx-auto">
-            Stop guessing and start preparing with certainty. Book a free evaluation session with our master trainers today.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+        <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={stagger} className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <motion.h2 variants={fadeUp} className="text-5xl md:text-6xl font-serif font-bold text-foreground mb-8">Ready to achieve your dream score?</motion.h2>
+          <motion.p variants={fadeUp} className="text-xl text-muted-foreground mb-10 max-w-2xl mx-auto">
+            Book a free evaluation session with our master trainers today.
+          </motion.p>
+          <motion.div variants={fadeUp} className="flex flex-col sm:flex-row gap-4 justify-center">
             <a href="tel:9315758000">
               <Button size="lg" className="h-16 px-10 text-lg bg-primary text-primary-foreground hover:bg-primary/90 rounded-full shadow-xl shadow-primary/20">
                 Call Us Now
               </Button>
             </a>
-            <a href="mailto:dreamdestiny.ktl@gmail.com">
+            <Link href="/contact">
               <Button size="lg" variant="outline" className="h-16 px-10 text-lg rounded-full border-2 bg-background">
-                Email Us
+                Send a Message
               </Button>
-            </a>
-          </div>
-        </div>
+            </Link>
+          </motion.div>
+        </motion.div>
       </section>
 
-      {/* Footer */}
-      <footer id="contact" className="bg-card pt-16 pb-8 border-t border-border">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
-            <div className="col-span-1 md:col-span-2">
-              <div className="mb-6">
-                <Logo size={52} showText={true} textSize="text-xl" />
-              </div>
-              <p className="text-muted-foreground mb-4 max-w-sm">
-                The premier IELTS, PTE and Visa Services institute dedicated to transforming your English scores and unlocking your global future. Trusted since 2018.
-              </p>
-              <div className="flex gap-2 mt-4">
-                {["IELTS", "PTE", "Visa Services"].map((tag) => (
-                  <span key={tag} className="px-2 py-0.5 rounded text-xs font-bold" style={{ background: "#2d6a4f", color: "white" }}>
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            </div>
-
-            <div>
-              <h4 className="font-bold text-foreground mb-6">Programs</h4>
-              <ul className="space-y-4">
-                <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">IELTS Coaching</a></li>
-                <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">PTE Academic</a></li>
-                <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Visa Services</a></li>
-                <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Mock Test Packages</a></li>
-                <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">One-on-One Coaching</a></li>
-              </ul>
-            </div>
-
-            <div>
-              <h4 className="font-bold text-foreground mb-6">Contact Us</h4>
-              <ul className="space-y-4 text-muted-foreground text-sm">
-                <li className="flex items-start gap-2">
-                  <Phone className="w-4 h-4 mt-0.5 flex-shrink-0 text-primary" />
-                  <div>
-                    <a href="tel:9315758000" className="hover:text-primary transition-colors block">Pradeep Beniwal: 93157-58000</a>
-                    <a href="tel:8708073889" className="hover:text-primary transition-colors block">Jagdeep Sandhu: 87080-73889</a>
-                    <a href="tel:9215009206" className="hover:text-primary transition-colors block">Gurpreet Singh: 92150-09206</a>
-                  </div>
-                </li>
-                <li className="flex items-center gap-2">
-                  <Mail className="w-4 h-4 flex-shrink-0 text-primary" />
-                  <a href="mailto:dreamdestiny.ktl@gmail.com" className="hover:text-primary transition-colors">
-                    dreamdestiny.ktl@gmail.com
-                  </a>
-                </li>
-                <li className="flex items-start gap-2">
-                  <MapPin className="w-4 h-4 mt-0.5 flex-shrink-0 text-primary" />
-                  <span>
-                    First Floor, Opp. PNB Bank,<br />
-                    Ambala Road, Kaithal - 136027
-                  </span>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div className="pt-8 border-t border-border text-center text-sm text-muted-foreground">
-            © {new Date().getFullYear()} Dream Destiny Center of PTE Elites. All rights reserved. &nbsp;|&nbsp; Kaithal, Haryana
-          </div>
-        </div>
-      </footer>
+      {/* WhatsApp Float */}
+      <a
+        href="https://wa.me/919315758000"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full flex items-center justify-center shadow-xl text-white transition-transform hover:scale-110"
+        style={{ background: "#25D366" }}
+        title="Chat on WhatsApp"
+      >
+        <MessageCircle className="w-7 h-7" fill="white" />
+      </a>
     </div>
   );
 }
