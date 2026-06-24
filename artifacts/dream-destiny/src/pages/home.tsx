@@ -40,7 +40,15 @@ export default function Home() {
     <div className="bg-background overflow-hidden">
 
       {/* Hero */}
-      <section className="pt-16 pb-20 lg:pt-28 lg:pb-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      <section
+        className="relative pt-16 pb-20 lg:pt-28 lg:pb-32 overflow-hidden"
+        style={{
+          backgroundImage: "linear-gradient(135deg, rgba(27,67,50,0.82) 0%, rgba(45,106,79,0.70) 50%, rgba(255,255,255,0.88) 100%), url('/card-bg.jpg')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      >
+        <div className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-8 items-center">
           <motion.div initial="hidden" animate="visible" variants={stagger} className="max-w-2xl">
             <motion.div variants={fadeUp} className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-secondary/20 text-secondary-foreground text-sm font-semibold mb-6">
@@ -98,6 +106,7 @@ export default function Home() {
               </div>
             </motion.div>
           </motion.div>
+        </div>
         </div>
       </section>
 
