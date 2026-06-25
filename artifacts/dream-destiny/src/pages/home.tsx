@@ -43,7 +43,7 @@ export default function Home() {
       <section
         className="relative pt-16 pb-20 lg:pt-28 lg:pb-32 overflow-hidden"
         style={{
-          backgroundImage: "linear-gradient(135deg, rgba(27,67,50,0.45) 0%, rgba(45,106,79,0.30) 50%, rgba(255,255,255,0.55) 100%), url('/banner-bg.jpg')",
+          backgroundImage: "linear-gradient(135deg, rgba(27,67,50,0.18) 0%, rgba(45,106,79,0.12) 50%, rgba(255,255,255,0.25) 100%), url('/banner-bg.jpg')",
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
