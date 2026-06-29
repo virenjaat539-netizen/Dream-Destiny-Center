@@ -7,9 +7,15 @@ const fadeUp = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
 };
 
-const CATEGORIES = ["All", "Classroom", "Events", "Achievements", "Students"];
+const CATEGORIES = ["All", "Visa Success", "Classroom", "Events", "Achievements", "Students"];
 
 const IMAGES = [
+  { id: 101, category: "Visa Success", src: "/gallery-canada-visa.png", title: "Canada Visa Approved — Congrats Ramesh Ji & Wife 🇨🇦" },
+  { id: 102, category: "Visa Success", src: "/gallery-germany-visa-1.png", title: "Germany Visa Approved 🇩🇪" },
+  { id: 103, category: "Visa Success", src: "/gallery-germany-visa-2.png", title: "Germany Visa Approved 🇩🇪" },
+  { id: 104, category: "Visa Success", src: "/gallery-uk-visa.png", title: "UK Visa Approved ✅ — Dream Destiny 🇬🇧" },
+  { id: 105, category: "Visa Success", src: "/gallery-australia-study-visa.png", title: "Australia Study Visa Approved ✅ 🇦🇺" },
+  { id: 106, category: "Visa Success", src: "/gallery-australia-visa.png", title: "Australia Visa Success 🇦🇺" },
   { id: 1, category: "Classroom", src: "https://picsum.photos/seed/class1/600/400", title: "Interactive IELTS Session" },
   { id: 2, category: "Students", src: "https://picsum.photos/seed/stud1/600/400", title: "Students at Mock Test" },
   { id: 3, category: "Achievements", src: "https://picsum.photos/seed/ach1/600/400", title: "Score Card Celebrations" },
